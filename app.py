@@ -1,0 +1,30 @@
+import streamlit as st
+from langchain_groq import ChatGroq
+from langchain_community.utilities import ArxivAPIWrapper,WikipediaAPIWrapper
+from langchain_community.tools import ArxivQueryRun,WikipediaQueryRun,DuckDuckGoSearchRun
+from langchain.agents import initialize_agent,AgentType
+from langchain.callbacks import StreamlitCallbackHandler
+import os
+from dotenv import load_dotenv
+
+## Langsmith Tracking
+os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
+os.environ["LANGCHAIN_PROJECT"]=os.getenv("LANGCHAIN_PROJECT")
+os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
+os.environ["LANGCHAIN_TRACING_V2"]="true"
+
+## Arxiv and wikipedia Tools
+arxiv_wrapper=ArxivAPIWrapper(top_k_results=1, doc_content_chars_max=250)
+arxiv=ArxivQueryRun(api_wrapper=arxiv_wrapper)
+
+api_wrapper=WikipediaAPIWrapper(top_k_results=1,doc_content_chars_max=250)
+wiki=WikipediaQueryRun(api_wrapper=api_wrapper)
+
+search=DuckDuckGoSearchRun(name="Search")
+
+st.title("Chat Llama3 with search")
+
+if "messages" not in st.session_state:
+    st.session_state["messages"]=[
+        {"role":"assisstant","content":"Hi,I'm a chatbot who can search the web. How can I help you?"}
+    ]
