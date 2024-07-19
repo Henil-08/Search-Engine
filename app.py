@@ -8,11 +8,7 @@ import os
 from dotenv import load_dotenv
 
 ## Langsmith Tracking
-os.environ["LANGCHAIN_API_KEY"]=os.getenv("LANGCHAIN_API_KEY")
-os.environ["LANGCHAIN_PROJECT"]=os.getenv("LANGCHAIN_PROJECT")
 os.environ["GROQ_API_KEY"]=os.getenv("GROQ_API_KEY")
-os.environ["LANGCHAIN_TRACING_V2"]="true"
-
 ## Arxiv and wikipedia Tools
 arxiv_wrapper=ArxivAPIWrapper(top_k_results=1, doc_content_chars_max=250)
 arxiv=ArxivQueryRun(api_wrapper=arxiv_wrapper)
